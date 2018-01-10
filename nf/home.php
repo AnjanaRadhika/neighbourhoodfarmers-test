@@ -84,7 +84,7 @@
 			</nav>
 		
 			<?
-			if(array_key_exists('logout',$_GET)) {
+			if(array_key_exists('logout',$_GET) {
 				if($_GET['logout'] === 1) {
 					session_unset();
 					session_destroy();

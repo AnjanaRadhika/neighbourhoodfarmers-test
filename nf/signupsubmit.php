@@ -1,13 +1,10 @@
 <?php
 	
 	session_start();
-	$link = mysqli_connect("shareddb-f.hosting.stackcp.net", "farmerdb-32364802", "admin123", "farmerdb-32364802");
-	echo("<script>console.log('inside signup submitted')</script>");
+	$link = mysqli_connect("localhost", "root", "admin", "nfdb");
 	if(mysqli_connect_error()) {
-		echo("<script>console.log('failed connection')</script>");
 		die("Failed to connect to the database ");
 	} else {
-		echo("<script>console.log('connection success')</script>");
 		if(!empty($_SESSION)) {		
 			$name=$_SESSION['name'];
 			$email=$_SESSION['email'];
@@ -21,8 +18,8 @@
 
 			$message = "<div class='container' style='background:whitesmoke'><br>Hello <strong>{$name}</strong>,<br><br> Welcome to NeighbourhoodFarmers.com You can login with: {$email} and your the password you entered.".
 				"Before you can use your account you must activate it! you can activate here: 
-				<a href='http://neighbourhoodfarmerstest-com.stackstaging.com/nf/activate.php?".urlencode(base64_encode("key=".$name."&email=".$email))
-				."'>http://neighbourhoodfarmerstest-com.stackstaging.com/nf/activate.php?".urlencode(base64_encode("key=".$name."&email=".$email))
+				<a href='http://localhost/nf/activate.php?".urlencode(base64_encode("key=".$name."&email=".$email))
+				."'>http://localhost/nf/activate.php?".urlencode(base64_encode("key=".$name."&email=".$email))
 				."</a><br><br>Thanks & Regards,<br>support@NeighbourhoodFarmers.com </div>";
 
 			$subject = "Your NeighbourhoodFarmers.com Account";
@@ -31,9 +28,6 @@
 			$query = "INSERT INTO `users`(`username`,`email`, `password`, `role`) VALUES('" . mysqli_real_escape_string($link, $_SESSION['name'])."','" 
 				. mysqli_real_escape_string($link, $_SESSION['email'])."','"
 				.mysqli_real_escape_string($link, password_hash($_SESSION['password'],PASSWORD_DEFAULT))."','Seller')";
-			
-echo $query;			
-			echo("<script>console.log('inside signup')</script>");
 				
 			if(mysqli_query($link, $query)) {
 				$sent=mail($to,$subject,$message,$headers);	

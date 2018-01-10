@@ -16,8 +16,8 @@
 		$message = "<div class='container' style='background:whitesmoke'><br>Hello <strong>{$name}</strong>,<br><br> To reset your NeighbourhoodFarmers.com password, 
 				please click on the below link or copy and paste the address onto your web browser\'s address window.
 				Once you\'re on the web page, you will be asked to enter and confirm your password.<br><br>".
-				"<a href='http://neighbourhoodfarmerstest-com.stackstaging.com/nf/changepwd.php?".urlencode(base64_encode("key=".$name."&email=".$email))
-			."'>http://neighbourhoodfarmerstest-com.stackstaging.com/nf/changepwd.php?".urlencode(base64_encode("key=".$name."&email=".$email))
+				"<a href='http://localhost/nf/changepwd.php?".urlencode(base64_encode("key=".$name."&email=".$email))
+			."'>http://localhost/nf/changepwd.php?".urlencode(base64_encode("key=".$name."&email=".$email))
 			."</a><br><br>Thanks & Regards,<br>support@NeighbourhoodFarmers.com </div>";
 
 		$subject = "How to change Your NeighbourhoodFarmers.com Account";
