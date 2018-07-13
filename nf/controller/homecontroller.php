@@ -1,7 +1,7 @@
 <?php
 	session_start();
 	$_SESSION = array();
-	$link = mysqli_connect("shareddb-f.hosting.stackcp.net", "farmerdb-32364802", "admin123", "farmerdb-32364802");
+	$link = mysqli_connect("localhost", "root", "admin", "nfdb");
 	$error=$script=$forgotpwderror=$loginerror=$hash="";
 
 	if(mysqli_connect_error()) {
@@ -9,6 +9,7 @@
 	} else {
 		if(isset($_POST)) {
 			if(array_key_exists('signup-submit', $_POST) && $_POST['signup-submit']=='Sign Up'){
+				echo("<script>console.log('inside signup')</script>");
 				if(array_key_exists('name', $_POST) OR array_key_exists('password', $_POST) OR array_key_exists('email', $_POST)) {
 					if($_POST['name']==""){
 						$error .= '<div class="alert-danger">User Name is required.</div>';
@@ -45,13 +46,18 @@
 						$forgotpwderror .= '<div class="alert-danger" >Please enter the email address.</div>';
 						$_SESSION['forgotpwdsubmitted'] = false;					
 					}else {
-						$query = "SELECT `username` FROM `users` WHERE `email` = '".mysqli_real_escape_string($link, $_POST['forgotemail'])."'";
+						$query = "SELECT `username`,`activate` FROM `users` WHERE `email` = '".mysqli_real_escape_string($link, $_POST['forgotemail'])."'";
 						$result = mysqli_query($link, $query);
 						if(mysqli_num_rows($result) > 0) {
 							$row=mysqli_fetch_array($result);
-							$_SESSION['name'] = $row['username'];
-							$_SESSION['forgotemail'] = $_POST['forgotemail'];
-							$_SESSION['forgotpwdsubmitted'] = true;
+							if($row['activate']) {
+								$_SESSION['name'] = $row['username'];
+								$_SESSION['forgotemail'] = $_POST['forgotemail'];
+								$_SESSION['forgotpwdsubmitted'] = true;
+							else {
+								$forgotpwderror .= '<div class="alert-danger">You need to get your account activated. Your account activation link has been sent to your registered email address.</div>';
+								$_SESSION['forgotpwdsubmitted'] = false;									
+							}
 						} else {
 							$forgotpwderror .= '<div class="alert-danger">Please enter a valid email address.</div>';
 							$_SESSION['forgotpwdsubmitted'] = false;						
@@ -72,14 +78,19 @@
 						$result = mysqli_query($link, $query);
 						if(mysqli_num_rows($result) > 0) {
 							$row=mysqli_fetch_array($result);
-							$hash=$row['password'];
-							if(password_verify($_POST['password'], $hash)) {
-								$_SESSION['name'] = $row['username'];
-								$_SESSION['email'] = $_POST['username'];
-								$_SESSION['signedin'] = true;
+							if($row['activate']) {
+								$hash=$row['password'];
+								if(password_verify($_POST['password'], $hash)) {
+									$_SESSION['name'] = $row['username'];
+									$_SESSION['email'] = $_POST['username'];
+									$_SESSION['signedin'] = true;
+								} else {
+									$loginerror .= '<div class="alert-danger">Invalid credentials. Please try again.</div>';								
+									$_SESSION['signedin'] = false;
+								}
 							} else {
-								$loginerror .= '<div class="alert-danger">Invalid credentials. Please try again.</div>';								
-								$_SESSION['signedin'] = false;
+									$loginerror .= '<div class="alert-danger">You need to get your account activated. Your account activation link has been sent to your registered email address.</div>';								
+									$_SESSION['signedin'] = false;								
 							}
 						} else {
 							$loginerror .= '<div class="alert-danger">Please enter a valid email address.</div>';	
