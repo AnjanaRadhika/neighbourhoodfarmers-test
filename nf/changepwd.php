@@ -1,5 +1,5 @@
 <?php
-	
+	//this is testing
 	session_start();
 	$link = mysqli_connect("localhost", "root", "admin", "nfdb");	
 	$pwdchangestatus =$script=$error=$active="";
