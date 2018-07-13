@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	$link = mysqli_connect("shareddb-f.hosting.stackcp.net", "farmerdb-32364802", "admin123", "farmerdb-32364802");
+	$link = mysqli_connect("localhost", "root", "admin", "nfdb");
 	$activatemsg="";
 	if(mysqli_connect_error()) {
 		die("Failed to connect to the database ");
@@ -17,7 +17,7 @@
 						<p>Hi <strong> {$key} </strong>,<br>
 							Your account with NeighbourhoodFarmers.com has been activated. 
 							Please click on the below link and login using your credentials to access your account.<br><br>
-							<a href='http://neighbourhoodfarmerstest-com.stackstaging.com/nf/home.php'>http://neighbourhoodfarmerstest-com.stackstaging.com/nf/home.php</a>
+							<a href='http://localhost/nf/home.php'>http://localhost/nf/home.php</a>
 						</p>
 						</div>";				
 			} else {
